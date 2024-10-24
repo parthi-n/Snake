@@ -8,53 +8,60 @@ const upBtnEl = document.getElementById("up");
 const downBtnEl = document.getElementById("down");
 const startBtnEl = document.getElementById("start");
 
-console.log(upBtnEl);
-
-const startPoint = document.getElementById("1-1");
-console.log(startPoint);
-
 /*---------- Variables (state) ---------*/
 
 // Snake - array with object
-let snake = [{ x: 1, y: 1 }];
+let snake = [{ x: 5, y: 4 }];
 
 // Direction
-//let direction = right;
+let direction = right;
 
 // Food postion
 let food = { x: 2, y: 2 };
 
 // Score
-// let score = 0
+let score = 0;
 
 // Gameover
-// let gameOver = false
+let gameOver = false;
 
 /*-------------- Functions -------------*/
 
 // To create game area with area variable
 const gameArea = () => {
 	for (let i = 0; i < area * area; i++) {
-		const square = document.createElement("div");
-		square.className = "square";
-		gameEl.appendChild(square);
+		const tile = document.createElement("div");
+		tile.className = "tile";
+		gameEl.appendChild(tile);
 	}
 };
 
-gameArea();
+//gameArea()
 
 // Draw Snake
 const drawSnake = () => {
 	// Reset game area -- by clearing the class name
-	// draw snake  -- ?
+	const tiles = document.querySelectorAll(".tile");
+	tiles.forEach((tile => tile.className = "tile"));
+	
+	// draw snake -- Index starts from zero
+	snake.forEach((seg) => {
+		const index = seg.y * area + seg.x;
+		tiles[index].classList.add('snake');
+
+	});
+
 	// Draw Food -- ?
 };
+
+
 
 // Move snake
 const moveSnake = () => {
 	// Check collision with food
 	// Check Collision with self / wall
 	// Add length to snake
+	drawSnake();
 };
 
 // Generate food
@@ -74,9 +81,17 @@ const gameLoop = () => {
 // Init game
 const initGame = () => {
 	// Invoke Create game area
+	gameArea();
+	
 	// Invoke generate food
+	const game = setInterval(moveSnake, 200);
 	// invoke game loop
 };
+
+
+
+initGame()
+
 
 const rightBtnClick = () => {
 	console.log("clicked");
@@ -96,7 +111,6 @@ const startBtnClick = () => {
 	console.log("Game started");
 	startPoint.classList.add("snake");
 };
-
 
 // Update Position
 // ???

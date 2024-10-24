@@ -35,10 +35,7 @@
 
 .tile {
 	outline: 1px solid red;
-	background-color: aquamarine;
-	width: 40px;
-	height: 40px;
-}
+	background-color: aquamarine;}
 
 .snake {
 	background-color: blue;
