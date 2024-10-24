@@ -1,6 +1,4 @@
 /*-------------------------------- Constants --------------------------------*/
-const gameEl = document.getElementById("game-area");
-const area = 10;
 
 const rightBtnEl = document.getElementById("right");
 const leftBtnEl = document.getElementById("left");
@@ -32,52 +30,6 @@ let food = { x: 2, y: 2 };
 
 /*-------------- Functions -------------*/
 
-// To create game area with area variable
-const gameArea = () => {
-	for (let i = 0; i < area * area; i++) {
-		const square = document.createElement("div");
-		square.className = "square";
-		gameEl.appendChild(square);
-	}
-};
-
-gameArea();
-
-// Draw Snake
-const drawSnake = () => {
-	// Reset game area -- by clearing the class name
-	// draw snake  -- ?
-	// Draw Food -- ?
-};
-
-// Move snake
-const moveSnake = () => {
-	// Check collision with food
-	// Check Collision with self / wall
-	// Add length to snake
-};
-
-// Generate food
-const addFood = () => {
-	// add at random place
-};
-
-//Game controll
-
-// Change Direction
-
-// GameLoop
-const gameLoop = () => {
-	//Set interval
-};
-
-// Init game
-const initGame = () => {
-	// Invoke Create game area
-	// Invoke generate food
-	// invoke game loop
-};
-
 const rightBtnClick = () => {
 	console.log("clicked");
 };
@@ -97,6 +49,16 @@ const startBtnClick = () => {
 	startPoint.classList.add("snake");
 };
 
+// start game
+const startGame = () => {
+	// set snake position
+
+	console.log("test");
+	// Food position randomly
+	// Initialize game variables and start loop
+};
+
+startGame();
 
 // Update Position
 // ???
