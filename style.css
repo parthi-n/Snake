@@ -10,21 +10,13 @@
 }
 
 #game-area {
-	width: fit-content;
-	height: fit-content;
+	width: 400px;
+	height: 400px;
 	margin: auto;
 	display: grid;
-	grid-template-columns: repeat(10, 20px);
-	grid-template-rows: repeat(10, 20px);
+	grid-template-columns: repeat(20, auto);
+	grid-template-rows: repeat(20, auto);
 	gap: 0;
-	
-}
-
-.square {
-	width: 20px;
-	height: 20px;
-	background-color:bisque;
-	border: 1px solid red;
 }
 
 .game-row {
@@ -34,14 +26,19 @@
 }
 
 .tile {
-	outline: 1px solid red;
-	background-color: aquamarine;}
+	/* outline: 1px solid red; */
+	background-color: aquamarine;
+}
 
 .snake {
 	background-color: blue;
 }
 
-.score {
+.food {
+	background-color: blueviolet;
+}
+
+#score-text {
 	color: black;
 	text-align: center;
 }
