@@ -11,7 +11,7 @@ const pauseBtnEl = document.getElementById("pause");
 const restartBtnEl = document.getElementById("restart");
 const scoreDisplay = document.getElementById("score");
 const wallCheckboxEl = document.getElementById("wall");
-const snakeEl = document.getElementsByClassName("snake");
+const snakeBodyEl = document.getElementsByClassName("s-body");
 
 const right = { x: 1, y: 0 }; // Right movement
 const left = { x: -1, y: 0 }; // Left movement
@@ -20,15 +20,15 @@ const down = { x: 0, y: 1 }; // Down movement
 
 const colors = ["#FF5733", "#33FF57", "#3357FF", "#FF33A1", "#FFBD33"];
 /*---------- Variables (state) ---------*/
-let snake = [{ x: 5, y: 4 }]; // Initial Snake position
+let snake = [{ x: 0, y: 0 }]; // Initial Snake position
 let direction = right; // Initial direction
-let food = { x: 0, y: 0 }; // Initial direction
+let food = { x: 5, y: 0 }; // Initial direction
 let score = 0; // Initial Score
 let game; // Store the game interval
 let gamePaused = false;
-let wallsEnabled = true;
+let wallsEnabled = false;
 
-
+const bodyClassID = [1, 2, 3, 4, 5];
 
 /*-------------- Functions -------------*/
 
@@ -51,14 +51,32 @@ const drawSnake = () => {
 	const tiles = document.querySelectorAll(".tile");
 	tiles.forEach((tile) => (tile.className = "tile"));
 
-	snake.forEach((seg) => {
-		const index = seg.y * size + seg.x;
-		tiles[index].classList.add("snake");
+	snake.forEach((seg, index) => {
+		const tilePos = seg.y * size + seg.x;
+		tiles[tilePos].classList.add("snake"); // Add "snake" class to all segments
+		if (index === 0) {
+			tiles[tilePos].classList.add("s-head"); // Add "head" class to the first segment
+		} else {
+			tiles[tilePos].classList.add("s-body"); // Add "body" class to all segments after the first
+		}
 	});
+
+	for (let i = 0; i < snakeBodyEl.length; i++) {
+		// Generate a random index to pick a suffix
+		const randomIndex = Math.floor(Math.random() * bodyClassID.length);
+		const randomClass = `b-${bodyClassID[randomIndex]}`;
+
+		// Add the random class to the element
+		snakeBodyEl[i].classList.add(randomClass);
+	}
 
 	// Draw Food
 	const foodPos = food.y * size + food.x;
 	tiles[foodPos].classList.add("food");
+};
+
+const bodyColor = () => {
+	console.log(bodySegments);
 };
 
 // Generate food
@@ -130,7 +148,11 @@ const getRandomColor = () => {
 
 // Initialize game
 const initGame = () => {
-	snake = [{ x: 5, y: 4 }];
+	snake = [
+		{ x: 2, y: 0 },
+		{ x: 1, y: 0 },
+		{ x: 0, y: 0 },
+	];
 	score = 0;
 	direction = right; // Reset direction
 	scoreDisplay.innerText = score;

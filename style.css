@@ -17,6 +17,7 @@
 	grid-template-columns: repeat(20, auto);
 	grid-template-rows: repeat(20, auto);
 	gap: 0;
+	background-color: aquamarine;
 }
 
 .game-row {
@@ -26,13 +27,43 @@
 }
 
 .tile {
-	/* outline: 1px solid red; */
-	background-color: aquamarine;
+	border-radius: 8px;
 }
 
 .snake {
-	background-color: blue;
+background-color: none;
 }
+
+.s-head {
+	background-color: rgb(255, 0, 230);
+	
+}
+
+.s-body {
+	background-color: rgb(90, 32, 32);
+}
+
+.s-body.b-1 {
+	background-color: rgb(193, 0, 0);
+}
+
+.s-body.b-2 {
+	background-color: rgb(197, 64, 64);
+}
+
+.s-body.b-3 {
+	background-color: rgb(85, 62, 62);
+}
+
+.s-body.b-4 {
+	background-color: rgb(208, 111, 0);
+}
+
+.s-body.b-5 {
+	background-color: rgb(192, 39, 153);
+}
+
+
 
 .food {
 	background-color: blueviolet;
