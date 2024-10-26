@@ -1,4 +1,5 @@
-/*-------------------------------- Constants --------------------------------*/
+/*------------- Constants ------------------*/
+
 const gameEl = document.getElementById("game-area");
 const area = 20; // length of the area
 
@@ -17,7 +18,7 @@ const down = { x: 0, y: 1 };
 /*---------- Variables (state) ---------*/
 let snake = [{ x: 5, y: 4 }];
 let direction = right;
-let food = { x: 2, y: 2 };
+let food = { x: 0, y: 0 };
 let score = 0;
 let gameOver = false;
 let game; // Store the game interval
