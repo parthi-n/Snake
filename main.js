@@ -1,32 +1,45 @@
 /*-------------------------------- Constants --------------------------------*/
 const gameEl = document.getElementById("game-area");
-const area = 20; // length of the area
+const size = 30; // length of the area
 
 const rightBtnEl = document.getElementById("right");
 const leftBtnEl = document.getElementById("left");
 const upBtnEl = document.getElementById("up");
 const downBtnEl = document.getElementById("down");
 const startBtnEl = document.getElementById("start");
+const pauseBtnEl = document.getElementById("pause");
+const restartBtnEl = document.getElementById("restart");
 const scoreDisplay = document.getElementById("score");
+const wallCheckboxEl = document.getElementById("wall");
+const snakeEl = document.getElementsByClassName("snake");
 
-const right = { x: 1, y: 0 };
-const left = { x: -1, y: 0 };
-const up = { x: 0, y: -1 };
-const down = { x: 0, y: 1 };
+const right = { x: 1, y: 0 }; // Right movement
+const left = { x: -1, y: 0 }; // Left movement
+const up = { x: 0, y: -1 }; // Up movement
+const down = { x: 0, y: 1 }; // Down movement
 
+const colors = ["#FF5733", "#33FF57", "#3357FF", "#FF33A1", "#FFBD33"];
 /*---------- Variables (state) ---------*/
-let snake = [{ x: 5, y: 4 }];
-let direction = right;
-let food = { x: 2, y: 2 };
-let score = 0;
-let gameOver = false;
+let snake = [{ x: 5, y: 4 }]; // Initial Snake position
+let direction = right; // Initial direction
+let food = { x: 0, y: 0 }; // Initial direction
+let score = 0; // Initial Score
 let game; // Store the game interval
+let gamePaused = false;
+let wallsEnabled = true;
+
+
 
 /*-------------- Functions -------------*/
 
-// Create game area
+// Create Game Area
 const gameArea = () => {
-	for (let i = 0; i < area * area; i++) {
+	gameEl.style.width = `${size * 20}px`;
+	gameEl.style.height = `${size * 20}px`;
+	gameEl.style.gridTemplateColumns = `repeat(${size}, auto)`;
+	gameEl.style.gridTemplateRows = `repeat(${size}, auto)`;
+
+	for (let i = 0; i < size * size; i++) {
 		const tile = document.createElement("div");
 		tile.className = "tile";
 		gameEl.appendChild(tile);
@@ -39,17 +52,44 @@ const drawSnake = () => {
 	tiles.forEach((tile) => (tile.className = "tile"));
 
 	snake.forEach((seg) => {
-		const index = seg.y * area + seg.x;
+		const index = seg.y * size + seg.x;
 		tiles[index].classList.add("snake");
 	});
 
 	// Draw Food
-	const foodPos = food.y * area + food.x;
+	const foodPos = food.y * size + food.x;
 	tiles[foodPos].classList.add("food");
 };
 
-// Move snake
+// Generate food
+const addFood = () => {
+	do {
+		food.x = Math.floor(Math.random() * size);
+		food.y = Math.floor(Math.random() * size);
+	} while (snake.some((segment) => segment.x === food.x && segment.y === food.y));
+};
+
+// Check Wall contact
+const checkWall = (head) => {
+	if (wallsEnabled && (head.x < 0 || head.x >= size || head.y < 0 || head.y >= size)) {
+		console.log("Wall contact");
+		return true;
+	}
+	return false;
+};
+
+// Check self contact
+const selfCollision = (head) => {
+	if (snake.some((segment) => segment.x === head.x && segment.y === head.y)) {
+		console.log("self collision");
+		return true; // Collision detected
+	}
+	return false; // No collision
+};
+
+// Move Snake
 const moveSnake = () => {
+	if (gamePaused) return;
 	const head = { x: snake[0].x + direction.x, y: snake[0].y + direction.y };
 
 	// Check collision with food
@@ -60,11 +100,22 @@ const moveSnake = () => {
 		snake.pop(); // Remove last segment if not eating
 	}
 
-	// Check Collision with self / wall
-	if (head.x < 0 || head.x >= area || head.y < 0 || head.y >= area || snake.some((segment) => segment.x === head.x && segment.y === head.y)) {
-		alert(`Game Over! Your score: ${score}`);
-		clearInterval(game);
-		return;
+	// If walls are disabled, wrap around the edges
+	if (!wallsEnabled) {
+		if (head.x < 0) head.x = size - 1; // Wrap from left to right
+		else if (head.x >= size) head.x = 0; // Wrap from right to left
+		if (head.y < 0) head.y = size - 1; // Wrap from top to bottom
+		else if (head.y >= size) head.y = 0; // Wrap from bottom to top
+	} else {
+		// Check collision with walls
+		if (checkWall(head)) {
+			gameOver();
+		}
+	}
+
+	// Check self collision
+	if (selfCollision(head)) {
+		gameOver();
 	}
 
 	// Add new head
@@ -73,12 +124,8 @@ const moveSnake = () => {
 	drawSnake();
 };
 
-// Generate food
-const addFood = () => {
-	do {
-		food.x = Math.floor(Math.random() * area);
-		food.y = Math.floor(Math.random() * area);
-	} while (snake.some((segment) => segment.x === food.x && segment.y === food.y));
+const getRandomColor = () => {
+	return colors[Math.floor(Math.random() * colors.length)];
 };
 
 // Initialize game
@@ -86,18 +133,33 @@ const initGame = () => {
 	snake = [{ x: 5, y: 4 }];
 	score = 0;
 	direction = right; // Reset direction
-	gameOver = false; // Reset gameOver flag
 	scoreDisplay.innerText = score;
 	drawSnake();
 	addFood();
 };
 
+const gameOver = () => {
+	alert(`Game Over! Your score: ${score}`);
+	clearInterval(game);
+	pauseBtnEl.disabled = true;
+	wallCheckboxEl.disabled = true;
+	return;
+};
+
 // Start game
 const startBtnClick = () => {
+	if (gamePaused) return;
 	console.log("Game started");
 	initGame();
+	wallCheckboxEl.disabled = true;
 	if (game) clearInterval(game); // Clear any existing game loop
 	game = setInterval(moveSnake, 500);
+	pauseBtnEl.disabled = false;
+};
+
+const pauseBtnClick = () => {
+	gamePaused = !gamePaused; // Toggle pause state
+	pauseBtnEl.innerText = gamePaused ? "Resume" : "Pause"; // Update button text
 };
 
 // Change Direction
@@ -120,6 +182,29 @@ leftBtnEl.addEventListener("click", leftBtnClick);
 upBtnEl.addEventListener("click", upBtnClick);
 downBtnEl.addEventListener("click", downBtnClick);
 startBtnEl.addEventListener("click", startBtnClick);
+pauseBtnEl.addEventListener("click", pauseBtnClick);
+wallCheckboxEl.addEventListener("change", () => {
+	wallsEnabled = wallCheckboxEl.checked;
+});
+document.addEventListener("keydown", (event) => {
+	switch (event.key) {
+		case "ArrowRight":
+			rightBtnClick();
+			break;
+		case "ArrowLeft":
+			leftBtnClick();
+			break;
+		case "ArrowUp":
+			upBtnClick();
+			break;
+		case "ArrowDown":
+			downBtnClick();
+			break;
+		case " ":
+			startBtnClick();
+			break;
+	}
+});
 
 // Initialize game area on page load
 gameArea();
