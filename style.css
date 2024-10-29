@@ -9,6 +9,18 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
+main {
+	max-width: 1000px;
+	margin: auto;
+}
+
+#scoreboard {
+	display: flex;
+	padding: 0 20px;
+	justify-content: start;
+	background-color: re;
+}
+
 #game-area {
 	width: 400px;
 	height: 400px;
@@ -17,7 +29,9 @@
 	grid-template-columns: repeat(20, auto);
 	grid-template-rows: repeat(20, auto);
 	gap: 0;
-	background-color: aquamarine;
+
+	border: solid #cccccc 2px;
+	border-radius: 10px;
 }
 
 .game-row {
@@ -28,42 +42,41 @@
 
 .tile {
 	border-radius: 8px;
+	border: red soild 1px;
 }
 
 .snake {
-background-color: none;
+	background-color: none;
 }
 
 .s-head {
-	background-color: rgb(255, 0, 230);
-	
+	background-color: rgb(233, 12, 85);
 }
 
 .s-body {
-	background-color: rgb(90, 32, 32);
+	background-position: center;
+	background-repeat: no-repeat;
 }
 
 .s-body.b-1 {
-	background-color: rgb(193, 0, 0);
+	background-image: url("images/body-1.png");
 }
 
 .s-body.b-2 {
-	background-color: rgb(197, 64, 64);
+	background-image: url("images/body-2.png");
 }
 
 .s-body.b-3 {
-	background-color: rgb(85, 62, 62);
+	background-image: url("images/body-3.png");
 }
 
 .s-body.b-4 {
-	background-color: rgb(208, 111, 0);
+	background-image: url("images/body-4.png");
 }
 
 .s-body.b-5 {
-	background-color: rgb(192, 39, 153);
+	background-image: url("images/body-5.png");
 }
-
-
 
 .food {
 	background-color: blueviolet;

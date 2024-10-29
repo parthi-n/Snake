@@ -10,9 +10,11 @@
 	<body>
 		<main>
 			<div>
-				<p id="score-text">Score: <span id="score">0</span></p>
+				<div id="scoreboard">
+					<p id="score-text">Score: <span id="score">0</span></p>
+				</div>
+				<div id="game-area"></div>
 			</div>
-			<div id="game-area"></div>
 
 			<div class="controller">
 				<button id="up" class="button">up</button>
@@ -27,7 +29,7 @@
 					<button id="restart" class="button">Restart</button>
 				</div>
 				<div>
-					<input id="wall" type="checkbox" checked="unchecked" />
+					<input id="wall" type="checkbox" />
 					<span>Wall</span>
 				</div>
 			</div>
