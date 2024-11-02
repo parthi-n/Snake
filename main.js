@@ -1,6 +1,6 @@
 /*-------------------------------- Constants --------------------------------*/
 const gameEl = document.getElementById("game-area");
-const width = 20; // Width of the area
+const width = 40; // Width of the area
 const height = 20; // Height of the area
 
 const rightBtnEl = document.getElementById("right");
@@ -35,6 +35,7 @@ let game; // Store the game interval
 let gamePaused = false;
 let wallsEnabled = false;
 let foodTimer;
+let life = { x: 0, y: 0 };
 
 /*-------------- Functions -------------*/
 
@@ -80,6 +81,10 @@ const drawSnake = () => {
 	// Draw Food
 	const foodPos = food.y * width + food.x;
 	tiles[foodPos].classList.add("food");
+
+	// Draw life
+	const lifePos = life.y * width + life.x;
+	tiles[lifePos].classList.add("life");
 };
 
 // Generate food
@@ -87,7 +92,15 @@ const addFood = () => {
 	do {
 		food.x = Math.floor(Math.random() * width);
 		food.y = Math.floor(Math.random() * height);
-	} while (snake.some((segment) => segment.x === food.x && segment.y === food.y));
+	} while (snake.some((segment) => segment.x === food.x && segment.y === food.y) || (food.x === life.x && food.y === life.y)); // Also check against life
+};
+
+// Generate life
+const addLife = () => {
+	do {
+		life.x = Math.floor(Math.random() * width);
+		life.y = Math.floor(Math.random() * height);
+	} while (snake.some((segment) => segment.x === life.x && segment.y === life.y));
 };
 
 // Check Wall contact
@@ -115,6 +128,15 @@ const moveSnake = () => {
 		addFood(); // Generate new food
 	} else {
 		snake.pop(); // Remove last segment if not eating
+	}
+
+	// Check collision with life - remove 3 segments
+	if (head.x === life.x && head.y === life.y) {
+		score++;
+		if (snake.length >= 6) {
+			snake.splice(-3); // Removes the last 3 segments
+		}
+		addLife(); // Generate new life
 	}
 
 	// If walls are disabled, wrap around the edges
