@@ -9,16 +9,39 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
+body {
+	background-color: #eeeeee;
+	font-family: "Quicksand", sans-serif;
+	font-optical-sizing: auto;
+	font-weight: 300;
+	font-style: normal;
+	margin: 0;
+}
+
 main {
-	max-width: 1000px;
-	margin: auto;
 }
 
 #scoreboard {
+	width: 1000px;
 	display: flex;
-	padding: 0 20px;
 	justify-content: start;
-	background-color: re;
+	background-color: white;
+	border-top-right-radius: 10px;
+	border-top-left-radius: 10px;
+	outline: solid black 2px;
+	border-radius: 10px;
+	margin-bottom: 20px;
+	padding: 8px;
+	margin: 0 auto 20px;
+}
+
+.score-wrapper {
+	padding: 10px 20px;
+}
+
+#score-text {
+	font-size: 20px;
+	font-weight: 700;
 }
 
 #game-area {
@@ -29,8 +52,9 @@ main {
 	grid-template-columns: repeat(20, auto);
 	grid-template-rows: repeat(20, auto);
 	gap: 0;
-
-	border: solid #cccccc 2px;
+	padding: 8px;
+	background-color: #f2ebc7;
+	outline: solid black 2px;
 	border-radius: 10px;
 }
 
@@ -47,6 +71,7 @@ main {
 
 .snake {
 	background-color: none;
+	outline: 3px solid black;
 }
 
 .s-head {
@@ -80,6 +105,9 @@ main {
 
 .food {
 	background-color: blueviolet;
+	border-radius: 10px;
+	transform: scale(0.8);
+	outline: 3px solid black;
 }
 
 #score-text {
@@ -95,6 +123,7 @@ main {
 	align-items: center;
 	gap: 10px;
 	margin: 50px;
+	display: none;
 }
 
 .button {
@@ -102,4 +131,37 @@ main {
 	text-align: center;
 	width: 60px;
 	height: 60px;
+}
+
+.game-wrapper {
+	position: relative;
+
+	margin: auto;
+	padding: 100px 0;
+}
+
+#game-dialog {
+	width: 100vw;
+	height: 100vh;
+	position: absolute;
+	top: 0;
+	right: 0;
+	left: 0;
+	background-color: white;
+}
+
+#intro {
+	padding: 120px 0;
+	width: 1000px;
+	margin: 0 auto;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	align-items: center;
+	gap: 40px;
+}
+
+.title-img {
+	width: 450px;
+	margin: auto;
 }

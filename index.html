@@ -5,32 +5,46 @@
 		<link rel="stylesheet" href="style.css" />
 		<link rel="icon" type="image/svg+xml" href="/vite.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet" />
+
 		<title>Snake Game</title>
 	</head>
 	<body>
 		<main>
-			<div>
-				<div id="scoreboard">
-					<p id="score-text">Score: <span id="score">0</span></p>
+			<div class="game-wrapper">
+				<div id="game-dialog">
+					<div id="intro">
+						<img class="title-img" src="images/title.svg" alt="title" />
+						<button id="start" class="button">Start</button>
+					</div>
 				</div>
-				<div id="game-area"></div>
-			</div>
+				<div>
+					<div>
+						<div id="scoreboard">
+							<div class="score-wrapper">
+								<p id="score-text">Score: <span id="score">0</span></p>
+							</div>
+						</div>
+						<div id="game-area"></div>
+					</div>
 
-			<div class="controller">
-				<button id="up" class="button">up</button>
-				<div>
-					<button id="left" class="button">left</button>
-					<button id="right" class="button">right</button>
-				</div>
-				<button id="down" class="button">down</button>
-				<div>
-					<button id="start" class="button">Start</button>
-					<button id="pause" class="button" disabled>Pause</button>
-					<button id="restart" class="button">Restart</button>
-				</div>
-				<div>
-					<input id="wall" type="checkbox" />
-					<span>Wall</span>
+					<div class="controller">
+						<button id="up" class="button">up</button>
+						<div>
+							<button id="left" class="button">left</button>
+							<button id="right" class="button">right</button>
+						</div>
+						<button id="down" class="button">down</button>
+						<div>
+							<button id="start" class="button">Start</button>
+							<button id="pause" class="button" disabled>Pause</button>
+							<button id="restart" class="button">Restart</button>
+						</div>
+						<div>
+							<input id="wall" type="checkbox" />
+							<span>Wall</span>
+						</div>
+					</div>
 				</div>
 			</div>
 		</main>

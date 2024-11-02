@@ -1,6 +1,6 @@
 /*-------------------------------- Constants --------------------------------*/
 const gameEl = document.getElementById("game-area");
-const width = 50; // Width of the area
+const width = 20; // Width of the area
 const height = 20; // Height of the area
 
 const rightBtnEl = document.getElementById("right");
@@ -11,6 +11,8 @@ const startBtnEl = document.getElementById("start");
 const pauseBtnEl = document.getElementById("pause");
 const restartBtnEl = document.getElementById("restart");
 const scoreDisplay = document.getElementById("score");
+const scoreboardEl = document.getElementById("scoreboard");
+const gameDialogEl = document.getElementById("game-dialog");
 const wallCheckboxEl = document.getElementById("wall");
 const snakeBodyEl = document.getElementsByClassName("s-body");
 
@@ -38,16 +40,17 @@ let foodTimer;
 
 // Create Game Area
 const gameArea = () => {
-    gameEl.style.width = `${width * 20}px`; // Set width
-    gameEl.style.height = `${height * 20}px`; // Set height
-    gameEl.style.gridTemplateColumns = `repeat(${width}, auto)`;
-    gameEl.style.gridTemplateRows = `repeat(${height}, auto)`;
+	gameEl.style.width = `${width * 20}px`; // Set width
+	gameEl.style.height = `${height * 20}px`; // Set height
+	scoreboardEl.style.width = `${width * 20}px`;
+	gameEl.style.gridTemplateColumns = `repeat(${width}, auto)`;
+	gameEl.style.gridTemplateRows = `repeat(${height}, auto)`;
 
-    for (let i = 0; i < width * height; i++) {
-        const tile = document.createElement("div");
-        tile.className = "tile";
-        gameEl.appendChild(tile);
-    }
+	for (let i = 0; i < width * height; i++) {
+		const tile = document.createElement("div");
+		tile.className = "tile";
+		gameEl.appendChild(tile);
+	}
 };
 
 // Draw Snake
@@ -81,132 +84,136 @@ const drawSnake = () => {
 
 // Generate food
 const addFood = () => {
-    do {
-        food.x = Math.floor(Math.random() * width);
-        food.y = Math.floor(Math.random() * height);
-    } while (snake.some((segment) => segment.x === food.x && segment.y === food.y));
+	do {
+		food.x = Math.floor(Math.random() * width);
+		food.y = Math.floor(Math.random() * height);
+	} while (snake.some((segment) => segment.x === food.x && segment.y === food.y));
 };
 
 // Check Wall contact
 const checkWall = (head) => {
-    if (wallsEnabled && (head.x < 0 || head.x >= width || head.y < 0 || head.y >= height)) {
-        console.log("Wall contact");
-        return true;
-    }
-    return false;
+	if (wallsEnabled && (head.x < 0 || head.x >= width || head.y < 0 || head.y >= height)) {
+		console.log("Wall contact");
+		return true;
+	}
+	return false;
 };
 
 // Check self contact
 const selfCollision = (head) => {
-    return snake.some((segment) => segment.x === head.x && segment.y === head.y);
+	return snake.some((segment) => segment.x === head.x && segment.y === head.y);
 };
 
 // Move Snake
 const moveSnake = () => {
-    if (gamePaused) return;
-    const head = { x: snake[0].x + direction.x, y: snake[0].y + direction.y };
+	if (gamePaused) return;
+	const head = { x: snake[0].x + direction.x, y: snake[0].y + direction.y };
 
-    // Check collision with food
-    if (head.x === food.x && head.y === food.y) {
-        score++;
-        addFood(); // Generate new food
-    } else {
-        snake.pop(); // Remove last segment if not eating
-    }
+	// Check collision with food
+	if (head.x === food.x && head.y === food.y) {
+		score++;
+		addFood(); // Generate new food
+	} else {
+		snake.pop(); // Remove last segment if not eating
+	}
 
-    // If walls are disabled, wrap around the edges
-    if (!wallsEnabled) {
-        if (head.x < 0) head.x = width - 1; // Wrap from left to right
-        else if (head.x >= width) head.x = 0; // Wrap from right to left
-        if (head.y < 0) head.y = height - 1; // Wrap from top to bottom
-        else if (head.y >= height) head.y = 0; // Wrap from bottom to top
-    } else {
-        // Check collision with walls
-        if (checkWall(head)) {
-            gameOver();
-        }
-    }
+	// If walls are disabled, wrap around the edges
+	if (!wallsEnabled) {
+		if (head.x < 0) head.x = width - 1; // Wrap from left to right
+		else if (head.x >= width) head.x = 0; // Wrap from right to left
+		if (head.y < 0) head.y = height - 1; // Wrap from top to bottom
+		else if (head.y >= height) head.y = 0; // Wrap from bottom to top
+	} else {
+		// Check collision with walls
+		if (checkWall(head)) {
+			gameOver();
+		}
+	}
 
-    // Check self collision
-    if (selfCollision(head)) {
-        gameOver();
-    }
+	// Check self collision
+	if (selfCollision(head)) {
+		gameOver();
+	}
 
-    // Add new head
-    snake.unshift(head);
-    scoreDisplay.innerText = score;
-    drawSnake();
+	// Add new head
+	snake.unshift(head);
+	scoreDisplay.innerText = score;
+	drawSnake();
 };
 
 // Initialize game
 const initGame = () => {
-    snake = [
-        { x: 2, y: 0 },
-        { x: 1, y: 0 },
-        { x: 0, y: 0 },
-    ];
-    score = 0;
-    direction = right; // Reset direction
-    scoreDisplay.innerText = score;
-    drawSnake();
-    addFood(); // Generate initial food
+	snake = [
+		{ x: 2, y: 0 },
+		{ x: 1, y: 0 },
+		{ x: 0, y: 0 },
+	];
+	score = 0;
+	direction = right; // Reset direction
+	scoreDisplay.innerText = score;
+	drawSnake();
+	addFood(); // Generate initial food
 };
 
 // Start game
 const startBtnClick = () => {
-    if (gamePaused) return;
-    console.log("Game started");
-    initGame();
-    wallCheckboxEl.disabled = true;
-    startBtnEl.disabled = true;
-    if (game) clearInterval(game); // Clear any existing game loop
-    game = setInterval(moveSnake, 75);
-    foodTimer = setInterval(addFood, foodAvlTime); // Keep generating food
-    pauseBtnEl.disabled = false;
+	hideDialog();
+	if (gamePaused) return;
+	console.log("Game started");
+	initGame();
+	wallCheckboxEl.disabled = true;
+	startBtnEl.disabled = true;
+	if (game) clearInterval(game); // Clear any existing game loop
+	game = setInterval(moveSnake, 75);
+	foodTimer = setInterval(addFood, foodAvlTime); // Keep generating food
+	pauseBtnEl.disabled = false;
 };
 
 const gameOver = () => {
-    alert(`Game Over! Your score: ${score}`);
-    clearInterval(game);
-    clearInterval(foodTimer);
-    pauseBtnEl.disabled = true;
-    wallCheckboxEl.disabled = true;
-    startBtnEl.disabled = false;
+	//alert(`Game Over! Your score: ${score}`);
+	clearInterval(game);
+	clearInterval(foodTimer);
+	pauseBtnEl.disabled = true;
+	wallCheckboxEl.disabled = true;
+	startBtnEl.disabled = false;
 };
 
 // Pause game
 const pauseBtnClick = () => {
-    gamePaused = !gamePaused; // Toggle pause state
-    pauseBtnEl.innerText = gamePaused ? "Resume" : "Pause"; // Update button text
+	gamePaused = !gamePaused; // Toggle pause state
+	pauseBtnEl.innerText = gamePaused ? "Resume" : "Pause"; // Update button text
 };
 
 // Restart game
 const restartGame = () => {
-    clearInterval(game); // Clear the game loop
-    clearInterval(foodTimer); // Clear the food timer
+	clearInterval(game); // Clear the game loop
+	clearInterval(foodTimer); // Clear the food timer
 	gamePaused = false;
 	initGame(); // Initialize game state
-    game = setInterval(moveSnake, 75); // Restart game loop
-    foodTimer = setInterval(addFood, foodAvlTime); // Restart food timer
-    pauseBtnEl.disabled = false; // Enable pause button
-    startBtnEl.disabled = true; // Disable start button
-    wallCheckboxEl.disabled = true; // Disable wall checkbox
+	game = setInterval(moveSnake, 75); // Restart game loop
+	foodTimer = setInterval(addFood, foodAvlTime); // Restart food timer
+	pauseBtnEl.disabled = false; // Enable pause button
+	startBtnEl.disabled = true; // Disable start button
+	wallCheckboxEl.disabled = true; // Disable wall checkbox
 };
 
-
+//hide Dialog
+const hideDialog = () => {
+	gameDialogEl.style.visibility = "hidden";
+};
 
 // Change Direction
 const rightBtnClick = () => {
-    if (direction.x !== -1) direction = right; // Prevent reversing
+	if (direction.x !== -1) direction = right; // Prevent reversing
 };
 const leftBtnClick = () => {
-    if (direction.x !== 1) direction = left; // Prevent reversing
+	if (direction.x !== 1) direction = left; // Prevent reversing
 };
 const upBtnClick = () => {
-    if (direction.y !== 1) direction = up; // Prevent reversing
+	if (direction.y !== 1) direction = up; // Prevent reversing
 };
 const downBtnClick = () => {
-    if (direction.y !== -1) direction = down; // Prevent reversing
+	if (direction.y !== -1) direction = down; // Prevent reversing
 };
 
 /*----------- Event Listeners ----------*/
@@ -218,26 +225,29 @@ startBtnEl.addEventListener("click", startBtnClick);
 restartBtnEl.addEventListener("click", restartGame);
 pauseBtnEl.addEventListener("click", pauseBtnClick);
 wallCheckboxEl.addEventListener("change", () => {
-    wallsEnabled = wallCheckboxEl.checked;
+	wallsEnabled = wallCheckboxEl.checked;
 });
 document.addEventListener("keydown", (event) => {
-    switch (event.key) {
-        case "ArrowRight":
-            rightBtnClick();
-            break;
-        case "ArrowLeft":
-            leftBtnClick();
-            break;
-        case "ArrowUp":
-            upBtnClick();
-            break;
-        case "ArrowDown":
-            downBtnClick();
-            break;
-        case " ":
-            startBtnClick();
-            break;
-    }
+	switch (event.key) {
+		case "ArrowRight":
+			rightBtnClick();
+			break;
+		case "ArrowLeft":
+			leftBtnClick();
+			break;
+		case "ArrowUp":
+			upBtnClick();
+			break;
+		case "ArrowDown":
+			downBtnClick();
+			break;
+		case " ":
+			startBtnClick();
+			break;
+		case "Escape":
+			pauseBtnClick();
+			break;
+	}
 });
 
 // Initialize game area on page load
