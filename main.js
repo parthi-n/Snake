@@ -25,6 +25,8 @@ const bodyClassID = [1, 2, 3, 4, 5];
 const colors = ["#FF5733", "#33FF57", "#3357FF", "#FF33A1", "#FFBD33"];
 
 const foodAvlTime = 5000; // Time to regenerate food
+const lifeAvlTime = 5000; // Time to regenerate food
+
 
 /*---------- Variables (state) ---------*/
 let snake = [{ x: 0, y: 0 }]; // Initial Snake position
@@ -35,7 +37,8 @@ let game; // Store the game interval
 let gamePaused = false;
 let wallsEnabled = false;
 let foodTimer;
-let life = { x: 0, y: 0 };
+let lifeTimer;
+let life = { x: 5, y: 5 };
 
 /*-------------- Functions -------------*/
 
@@ -188,6 +191,7 @@ const startBtnClick = () => {
 	if (game) clearInterval(game); // Clear any existing game loop
 	game = setInterval(moveSnake, 75);
 	foodTimer = setInterval(addFood, foodAvlTime); // Keep generating food
+	lifeTimer = setInterval(addLife, lifeAvlTime); // Keep generating food
 	pauseBtnEl.disabled = false;
 };
 
