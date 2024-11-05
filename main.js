@@ -11,8 +11,10 @@ const startBtnEl = document.getElementById("start");
 const pauseBtnEl = document.getElementById("pause");
 const restartBtnEl = document.getElementById("restart");
 const scoreDisplay = document.getElementById("score");
+const targetDisplay = document.getElementById("target");
+const msgDisplay = document.getElementById("msg");
 const scoreboardEl = document.getElementById("scoreboard");
-const gameDialogEl = document.getElementById("game-dialog");
+const gameModalEl = document.getElementById("game-modal");
 const wallCheckboxEl = document.getElementById("wall");
 const snakeBodyEl = document.getElementsByClassName("s-body");
 
@@ -27,6 +29,7 @@ const colors = ["#FF5733", "#33FF57", "#3357FF", "#FF33A1", "#FFBD33"];
 const foodAvlTime = 5000; // Time to regenerate food
 const lifeAvlTime = 5000; // Time to regenerate food
 
+const winCondition = 100; // 100pt required to win the game
 
 /*---------- Variables (state) ---------*/
 let snake = [{ x: 0, y: 0 }]; // Initial Snake position
@@ -35,6 +38,7 @@ let food = { x: 5, y: 0 }; // Initial food position
 let score = 0; // Initial Score
 let game; // Store the game interval
 let gamePaused = false;
+let gamePlayed = false;
 let wallsEnabled = false;
 let foodTimer;
 let lifeTimer;
@@ -125,9 +129,16 @@ const moveSnake = () => {
 	if (gamePaused) return;
 	const head = { x: snake[0].x + direction.x, y: snake[0].y + direction.y };
 
+	// Check for win condition (score reaches 10)
+	if (score >= winCondition) {
+		gameWin();
+		return;
+	}
+
 	// Check collision with food
 	if (head.x === food.x && head.y === food.y) {
 		score++;
+		console.log(score);
 		addFood(); // Generate new food
 	} else {
 		snake.pop(); // Remove last segment if not eating
@@ -176,18 +187,20 @@ const initGame = () => {
 	score = 0;
 	direction = right; // Reset direction
 	scoreDisplay.innerText = score;
+	targetDisplay.innerText = winCondition;
 	drawSnake();
 	addFood(); // Generate initial food
 };
 
 // Start game
 const startBtnClick = () => {
-	hideDialog();
+	hideModal();
 	if (gamePaused) return;
 	console.log("Game started");
 	initGame();
 	wallCheckboxEl.disabled = true;
 	startBtnEl.disabled = true;
+	gamePlayed = true;
 	if (game) clearInterval(game); // Clear any existing game loop
 	game = setInterval(moveSnake, 75);
 	foodTimer = setInterval(addFood, foodAvlTime); // Keep generating food
@@ -195,6 +208,7 @@ const startBtnClick = () => {
 	pauseBtnEl.disabled = false;
 };
 
+//GameOver - Game Lost
 const gameOver = () => {
 	//alert(`Game Over! Your score: ${score}`);
 	clearInterval(game);
@@ -202,6 +216,17 @@ const gameOver = () => {
 	pauseBtnEl.disabled = true;
 	wallCheckboxEl.disabled = true;
 	startBtnEl.disabled = false;
+};
+
+//  Game Won
+const gameWin = () => {
+	clearInterval(game);
+	clearInterval(foodTimer);
+	clearInterval(lifeTimer);
+	pauseBtnEl.disabled = true;
+	wallCheckboxEl.disabled = true;
+	startBtnEl.disabled = false;
+	msgDisplay.innerText = "You Win!";
 };
 
 // Pause game
@@ -223,9 +248,9 @@ const restartGame = () => {
 	wallCheckboxEl.disabled = true; // Disable wall checkbox
 };
 
-//hide Dialog
-const hideDialog = () => {
-	gameDialogEl.style.visibility = "hidden";
+//hide modal
+const hideModal = () => {
+	gameModalEl.style.visibility = "hidden";
 };
 
 // Change Direction

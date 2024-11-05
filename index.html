@@ -12,10 +12,10 @@
 	<body>
 		<main>
 			<div class="game-wrapper">
-				<div id="game-dialog">
+				<div id="game-modal">
 					<div id="intro">
 						<img class="title-img" src="images/title.svg" alt="title" />
-						<div class="dialog-controls" >
+						<div class="modal-controls">
 							<button id="start" class="button">Start</button>
 							<div>
 								<input id="wall" type="checkbox" />
@@ -28,7 +28,13 @@
 					<div>
 						<div id="scoreboard">
 							<div class="score-wrapper">
-								<p id="score-text">Score: <span id="score">0</span></p>
+								<div>
+									<p id="score-text">Score: <span id="score">0</span>/<span id="target">0</span> <span id="msg"></span></p>
+								</div>
+
+								<div>
+									<button id="pause" class="button" disabled>Pause</button>
+								</div>
 							</div>
 						</div>
 						<div id="game-area"></div>

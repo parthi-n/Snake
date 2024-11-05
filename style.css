@@ -37,6 +37,10 @@ main {
 
 .score-wrapper {
 	padding: 10px 20px;
+	width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 #score-text {
@@ -159,7 +163,7 @@ main {
 	padding: 100px 0;
 }
 
-#game-dialog {
+#game-modal {
 	width: 100vw;
 	height: 100vh;
 	position: absolute;
@@ -167,6 +171,7 @@ main {
 	right: 0;
 	left: 0;
 	background-color: white;
+	z-index: 999;
 }
 
 #intro {
@@ -185,7 +190,7 @@ main {
 	margin: auto;
 }
 
-.dialog-controls {
+.modal-controls {
 	display: flex;
 	justify-content: center;
 	flex-direction: column;
@@ -193,6 +198,6 @@ main {
 	gap: 40px;
 }
 
-.dialog-controls #wall {
+.modal-controls #wall {
 	font-size: 18px;
 }
