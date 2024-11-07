@@ -24,7 +24,7 @@ const up = { x: 0, y: -1 }; // Up movement
 const down = { x: 0, y: 1 }; // Down movement
 
 const bodyClassID = [1, 2, 3, 4, 5];
-const colors = ["#FF5733", "#33FF57", "#3357FF", "#FF33A1", "#FFBD33"];
+
 
 const foodAvlTime = 5000; // Time to regenerate food
 const lifeAvlTime = 5000; // Time to regenerate food
@@ -113,7 +113,6 @@ const addLife = () => {
 // Check Wall contact
 const checkWall = (head) => {
 	if (wallsEnabled && (head.x < 0 || head.x >= width || head.y < 0 || head.y >= height)) {
-		console.log("Wall contact");
 		return true;
 	}
 	return false;
@@ -138,7 +137,6 @@ const moveSnake = () => {
 	// Check collision with food
 	if (head.x === food.x && head.y === food.y) {
 		score++;
-		console.log(score);
 		addFood(); // Generate new food
 	} else {
 		snake.pop(); // Remove last segment if not eating
@@ -196,7 +194,6 @@ const initGame = () => {
 const startBtnClick = () => {
 	hideModal();
 	if (gamePaused) return;
-	console.log("Game started");
 	initGame();
 	wallCheckboxEl.disabled = true;
 	startBtnEl.disabled = true;
